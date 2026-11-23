@@ -36,18 +36,18 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libcap2-bin \
-	  libevent-2.1-7t64 \
-	  libssl3t64 \
+    libevent-2.1-7t64 \
+    libssl3t64 \
     liblzma5 \
     libzstd1 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -g 101 tor && \
     useradd -m -u 101 -g 101 -s /bin/false -d /var/lib/tor tor && \
-	  mkdir -p /etc/tor \
-			       /usr/local/share/tor \
-			       /var/log/tor \
-	  && chown -R 101:101 /var/log/tor /usr/local/share/tor /etc/tor
+    mkdir -p /etc/tor \
+             /usr/local/share/tor \
+             /var/log/tor \
+    && chown -R 101:101 /var/log/tor /usr/local/share/tor /etc/tor
 
 COPY --from=tor-build /usr/local/bin/* /usr/local/bin/
 COPY --from=tor-build /usr/local/share/tor/* /usr/local/share/tor/
