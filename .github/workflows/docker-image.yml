@@ -2,7 +2,9 @@ name: Publish Docker image
 
 on:
   push:
-    tags: [ 'v*.*.*' ]
+#    tags: [ 'v*.*.*' ]
+    branches: [ testing ]
+  workflow_dispatch:
 
 jobs:
   buildx:
@@ -20,16 +22,16 @@ jobs:
         with:
           images: sh4zb0t/obfs4-bridge
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v4
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+#      - name: Log in to Docker Hub
+#        uses: docker/login-action@v4
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v7
         with:
           platforms: linux/amd64,linux/arm64
-          push: true
+#          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
