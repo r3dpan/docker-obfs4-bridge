@@ -37,6 +37,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libcap2-bin \
     libevent-2.1-7t64 \
+    zlib1g \
     libssl3t64 \
     liblzma5 \
     libzstd1 \
