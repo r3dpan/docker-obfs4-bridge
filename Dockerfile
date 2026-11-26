@@ -26,7 +26,7 @@ FROM --platform=$BUILDPLATFORM golang:1.27.4-trixie AS obfs4-build
 ARG TARGETOS
 ARG TARGETARCH
 
-RUN git clone -b lyrebird-0.10.0 --single-branch https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird.git
+RUN git clone -b 0.10.0 --single-branch https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird.git
 WORKDIR /go/lyrebird/
 RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -trimpath -o out/lyrebird ./lyrebird
 
