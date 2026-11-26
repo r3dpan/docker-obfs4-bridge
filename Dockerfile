@@ -28,7 +28,7 @@ ARG TARGETARCH
 
 RUN git clone -b 0.10.0 --single-branch https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird.git
 WORKDIR /go/lyrebird/
-RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -trimpath -o out/lyrebird ./lyrebird
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -trimpath -o /out/lyrebird .
 
 FROM debian:trixie-slim AS final
 
@@ -52,7 +52,7 @@ RUN groupadd -g 101 tor && \
 
 COPY --from=tor-build /usr/local/bin/* /usr/local/bin/
 COPY --from=tor-build /usr/local/share/tor/* /usr/local/share/tor/
-COPY --from=obfs4-build /go/lyrebird/out/lyrebird /usr/local/bin/lyrebird
+COPY --from=obfs4-build /out/lyrebird /usr/local/bin/lyrebird
 
 RUN setcap cap_net_bind_service=+ep /usr/local/bin/lyrebird
 
