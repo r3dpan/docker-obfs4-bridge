@@ -26,9 +26,9 @@ FROM --platform=$BUILDPLATFORM golang:1.27.4-trixie AS obfs4-build
 ARG TARGETOS
 ARG TARGETARCH
 
-RUN git clone -b obfs4proxy-0.0.14 --single-branch https://gitlab.com/yawning/obfs4.git
-WORKDIR /go/obfs4/
-RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o obfs4proxy/obfs4proxy ./obfs4proxy
+RUN git clone -b lyrebird-0.10.0 --single-branch https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird.git
+WORKDIR /go/lyrebird/
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -trimpath -o out/lyrebird ./lyrebird
 
 FROM debian:trixie-slim AS final
 
@@ -52,9 +52,9 @@ RUN groupadd -g 101 tor && \
 
 COPY --from=tor-build /usr/local/bin/* /usr/local/bin/
 COPY --from=tor-build /usr/local/share/tor/* /usr/local/share/tor/
-COPY --from=obfs4-build /go/obfs4/obfs4proxy/obfs4proxy /usr/bin/
+COPY --from=obfs4-build /go/lyrebird/out/lyrebird /usr/local/bin/lyrebird
 
-RUN setcap cap_net_bind_service=+ep /usr/bin/obfs4proxy
+RUN setcap cap_net_bind_service=+ep /usr/local/bin/lyrebird
 
 COPY start-tor.sh /usr/local/bin/
 RUN chmod 0755 /usr/local/bin/start-tor.sh
